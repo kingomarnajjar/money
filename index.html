@@ -11,60 +11,70 @@
     body { font-family: 'Inter', system-ui, sans-serif; }
     .blink { animation: blink 1.5s steps(1) infinite; }
     @keyframes blink { 0%,100% { opacity: 1 } 50% { opacity: 0.4 } }
+
+    /* This single rule makes everything 75% of original size */
+    .scale-75 {
+      transform: scale(0.75);
+      transform-origin: center center;
+    }
   </style>
 </head>
 <body class="min-h-screen bg-black text-white flex items-center justify-center p-5">
 
-  <div class="max-w-lg w-full space-y-16">
+  <!-- Everything inside this div is now 75% size -->
+  <div class="scale-75">
 
-    <!-- Header -->
-    <div class="text-center space-y-4">
-      <h1 class="text-6xl md:text-8xl font-black tracking-tighter">
-        INVEST
-      </h1>
-      <p class="text-2xl md:text-3xl font-light text-zinc-500">
-        One-time. No bullshit.
-      </p>
-    </div>
+    <div class="max-w-lg w-full space-y-16">
 
-    <!-- Amount -->
-    <div class="space-y-8">
-      <div class="text-center">
-        <span class="text-8xl md:text-9xl font-black tracking-tight">
-          $<span id="display">100</span>
-        </span>
-        <span class="text-4xl font-light text-zinc-600"> USD</span>
+      <!-- Header -->
+      <div class="text-center space-y-4">
+        <h1 class="text-6xl md:text-8xl font-black tracking-tighter">
+          INVEST
+        </h1>
+        <p class="text-2xl md:text-3xl font-light text-zinc-500">
+          One-time. No bullshit.
+        </p>
       </div>
 
-      <input 
-        type="number" 
-        id="amount"
-        min="5" 
-        value="100"
-        class="w-full bg-transparent border-t-0 border-x-0 border-b-4 border-white text-6xl text-center font-bold focus:outline-none focus:border-sky-400 transition pb-2"
-        placeholder="0"
-      />
-    </div>
+      <!-- Amount -->
+      <div class="space-y-8">
+        <div class="text-center">
+          <span class="text-8xl md:text-9xl font-black tracking-tight">
+            $<span id="display">100</span>
+          </span>
+          <span class="text-4xl font-light text-zinc-600"> USD</span>
+        </div>
 
-    <!-- Pay Button -->
-    <div class="pt-8">
-      <button id="pay" class="group relative w-full overflow-hidden bg-sky-400 hover:bg-sky-300 text-black font-black text-2xl uppercase tracking-wider py-8 transition-all">
-        <span class="relative z-10">Pay & Invest Now</span>
-        <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
-      </button>
-    </div>
+        <input 
+          type="number" 
+          id="amount"
+          min="5" 
+          value="100"
+          class="w-full bg-transparent border-t-0 border-x-0 border-b-4 border-white text-6xl text-center font-bold focus:outline-none focus:border-sky-400 transition pb-2"
+          placeholder="0"
+        />
+      </div>
 
-    <!-- Trust line – tiny and confident -->
-    <div class="text-center space-y-3 text-zinc-600 text-sm uppercase tracking-widest">
-      <div>Secured by Stripe • 256-bit encryption</div>
-      <div>Funds received instantly • Zero fees on our end</div>
-      <div class="pt-4 text-sky-400 blink">Live • Accepting payments</div>
-    </div>
+      <!-- Pay Button -->
+      <div class="pt-8">
+        <button id="pay" class="group relative w-full overflow-hidden bg-sky-400 hover:bg-sky-300 text-black font-black text-2xl uppercase tracking-wider py-8 transition-all">
+          <span class="relative z-10">Pay & Invest Now</span>
+          <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+        </button>
+      </div>
 
+      <!-- Trust line -->
+      <div class="text-center space-y-3 text-zinc-600 text-sm uppercase tracking-widest">
+        <div>Secured by Stripe • 256-bit encryption</div>
+        <div>Funds received instantly • Zero fees on our end</div>
+        <div class="pt-4 text-sky-400 blink">Live • Accepting payments</div>
+      </div>
+
+    </div>
   </div>
 
   <script>
-    const stripe = Stripe('pk_live_XXXXXXXXXXXXXXXXXXXXXXXX'); // ← your key
+    const stripe = Stripe('pk_live_XXXXXXXXXXXXXXXXXXXXXXXX');
 
     const amountInput = document.getElementById('amount');
     const display = document.getElementById('display');
