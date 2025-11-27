@@ -6,97 +6,212 @@
   <title>Invest</title>
   <script src="https://js.stripe.com/v3/"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
     body { font-family: 'Inter', system-ui, sans-serif; }
     .blink { animation: blink 1.5s steps(1) infinite; }
     @keyframes blink { 0%,100% { opacity: 1 } 50% { opacity: 0.4 } }
+    .scale-75 { transform: scale(0.75); transform-origin: center center; }
 
-    /* This single rule makes everything 75% of original size */
-    .scale-75 {
-      transform: scale(0.75);
-      transform-origin: center center;
+    .content-box {
+      max-width: 28rem; /* same as your max-w-lg */
+      margin: 0 auto;
+      width: 100%;
+    }
+    .amount-container {
+      padding: 3rem 0;
+      width: 100%;
+    }
+    .amount-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      gap: 0.4ch;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      white-space: nowrap;
+      width: 100%;
+    }
+    #amountInput {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: white;
+      font: inherit;
+      text-align: center;
+      min-width: 1ch;
+      caret-color: #0ea5e9;
+    }
+    .usd {
+      font-size: 0.38em;
+      font-weight: 400;
+      color: #71717a;
     }
   </style>
 </head>
 <body class="min-h-screen bg-black text-white flex items-center justify-center p-5">
 
-  <!-- Everything inside this div is now 75% size -->
-  <div class="scale-75">
+  <div class="scale-75 w-full">
+    <div class="content-box mx-auto space-y-16">
 
-    <div class="max-w-lg w-full space-y-16">
-
-      <!-- Header -->
       <div class="text-center space-y-4">
-        <h1 class="text-6xl md:text-8xl font-black tracking-tighter">
-          INVEST
-        </h1>
-        <p class="text-2xl md:text-3xl font-light text-zinc-500">
-          One-time. No bullshit.
-        </p>
+        <h1 class="text-6xl md:text-8xl font-black tracking-tighter">INVEST</h1>
+        <p class="text-2xl md:text-3xl font-light text-zinc-500">One-time. No bullshit.</p>
       </div>
 
-      <!-- Amount -->
-      <div class="space-y-8">
-        <div class="text-center">
-          <span class="text-8xl md:text-9xl font-black tracking-tight">
-            $<span id="display">100</span>
-          </span>
-          <span class="text-4xl font-light text-zinc-600"> USD</span>
+      <!-- PERFECT AMOUNT: STAYS INSIDE THE BOX, SHRINKS AFTER 3 DIGITS -->
+      <div class="amount-container">
+        <div class="amount-wrapper text-9xl md:text-[11rem]">
+          $<input type="text" id="amountInput" value="100" placeholder="0">
+          <span class="usd">USD</span>
         </div>
-
-        <input 
-          type="number" 
-          id="amount"
-          min="5" 
-          value="100"
-          class="w-full bg-transparent border-t-0 border-x-0 border-b-4 border-white text-6xl text-center font-bold focus:outline-none focus:border-sky-400 transition pb-2"
-          placeholder="0"
-        />
       </div>
 
-      <!-- Pay Button -->
+      <div>
+        <input type="email" id="email" required placeholder="your@email.com"
+               class="w-full bg-transparent border-t-0 border-x-0 border-b-4 border-white text-4xl text-center font-medium focus:outline-none focus:border-sky-400 transition pb-2">
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <button data-months="6"  class="term-btn py-4 border-4 border-white text-2xl font-bold hover:bg-white hover:text-black transition">6 MO</button>
+        <button data-months="12" class="term-btn py-4 border-4 border-white text-2xl font-bold hover:bg-white hover:text-black transition">1 YR</button>
+        <button data-months="24" class="term-btn py-4 border-4 border-white text-2xl font-bold hover:bg-white hover:text-black transition bg-white text-black">2 YR</button>
+        <button data-months="60" class="term-btn py-4 border-4 border-white text-2xl font-bold hover:bg-white hover:text-black transition">5 YR</button>
+      </div>
+
       <div class="pt-8">
-        <button id="pay" class="group relative w-full overflow-hidden bg-sky-400 hover:bg-sky-300 text-black font-black text-2xl uppercase tracking-wider py-8 transition-all">
+        <button id="pay" class="group relative w-full overflow-hidden bg-sky-400 hover:bg-sky-300 text-black font-black text-2xl uppercase tracking-wider py-8 transition-all rounded-2xl">
           <span class="relative z-10">Pay & Invest Now</span>
           <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
         </button>
       </div>
 
-      <!-- Trust line -->
-      <div class="text-center space-y-3 text-zinc-600 text-sm uppercase tracking-widest">
-        <div>Secured by Stripe • 256-bit encryption</div>
-        <div>Funds received instantly • Zero fees on our end</div>
-        <div class="pt-4 text-sky-400 blink">Live • Accepting payments</div>
+      <div class="pt-12 text-center">
+        <button id="checkReturns" class="text-sky-400 hover:text-sky-300 underline uppercase tracking-widest text-lg font-bold">
+          Check Projected Returns
+        </button>
       </div>
 
+      <div class="text-center space-y-3 text-zinc-600 text-sm uppercase tracking-widest">
+        <div>Secured by Stripe 256-bit encryption</div>
+        <div>Funds received instantly Zero fees on our end</div>
+        <div class="pt-4 text-sky-400 blink">Live Accepting payments</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal (unchanged) -->
+  <div id="returnsModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div class="absolute inset-0 bg-black/90 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-4xl mx-4 bg-gray-950 border border-gray-800 rounded-3xl shadow-2xl p-10 md:p-16">
+      <div class="text-center space-y-10">
+        <div>
+          <h2 class="text-9xl md:text-[11rem] font-black leading-none text-sky-400">+69%</h2 насла
+          <p class="text-5xl md:text-6xl font-black mt-6">$10,000 to $16,900</p>
+          <p class="text-2xl md:text-3xl text-zinc-400 mt-4">in 24 months</p>
+        </div>
+        <div class="h-96 md:h-[28rem] bg-gray-900/60 rounded-3xl p-6 border border-gray-800">
+          <canvas id="returnsChart"></canvas>
+        </div>
+        <p class="text-xl text-zinc-500">Example based on $10,000 investment</p>
+        <button id="closeModal" class="w-full max-w-md mx-auto py-6 bg-sky-500 hover:bg-sky-400 text-black text-3xl font-black uppercase tracking-wider rounded-2xl transition">
+          Close
+        </button>
+      </div>
     </div>
   </div>
 
   <script>
-    const stripe = Stripe('pk_live_XXXXXXXXXXXXXXXXXXXXXXXX');
+    const amountInput = document.getElementById('amountInput');
+    const wrapper = amountInput.parentElement;
 
-    const amountInput = document.getElementById('amount');
-    const display = document.getElementById('display');
+    function updateSize() {
+      let raw = amountInput.value.replace(/[^0-9]/g, '');
+      if (!raw) raw = '0';
+      amountInput.value = Number(raw).toLocaleString();
 
-    amountInput.addEventListener('input', (e) => {
-      let val = e.target.value.replace(/\D/g,'') || '0';
-      e.target.value = val;
-      display.textContent = Number(val).toLocaleString();
+      const digitCount = raw.length;
+
+      // Progressive shrink after 3 digits – stays perfectly inside the box
+      if (digitCount <= 1) {
+        wrapper.style.fontSize = '8.5rem'; // 11rem max
+      } else if (digitCount === 3) {
+        wrapper.style.fontSize = '6.5rem';
+      } else if (digitCount === 4) {
+        wrapper.style.fontSize = '5.5rem';
+      } else if (digitCount === 5) {
+        wrapper.style.fontSize = '4.5rem';
+      } else if (digitCount === 6) {
+        wrapper.style.fontSize = '3.8rem';
+      } else if (digitCount >= 7) {
+        wrapper.style.fontSize = '3rem';
+      }
+    }
+
+    amountInput.addEventListener('input', updateSize);
+    amountInput.addEventListener('focus', () => amountInput.select());
+    amountInput.addEventListener('keydown', e => {
+      if ([8,37,39,46,9].includes(e.keyCode) || e.metaKey) return;
+      if (!/[0-9]/.test(e.key)) e.preventDefault();
     });
 
-    document.getElementById('pay').addEventListener('click', () => {
-      let amount = parseInt(amountInput.value);
-      if (!amount || amount < 5) return alert('Minimum $5');
+    updateSize(); // init
 
-      stripe.redirectToCheckout({
-        lineItems: [{ price: 'price_1YOUR_PRICE_ID', quantity: 1 }],
-        mode: 'payment',
-        successUrl: window.location.origin + '/success.html',
-        cancelUrl: window.location.origin,
-        billingAddressCollection: 'required',
-      }).then(r => r.error && alert(r.error.message));
+    document.querySelectorAll('.term-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.term-btn').forEach(b => b.classList.remove('bg-white','text-black'));
+        btn.classList.add('bg-white','text-black');
+      };
     });
+
+    document.getElementById('pay').onclick = () => {
+      const amount = parseInt(amountInput.value.replace(/,/g,'')) || 0;
+      const email = document.getElementById('email').value.trim();
+      if (amount < 5) return alert('Minimum $5');
+      if (!email.includes('@')) return alert('Valid email required');
+      alert(`Investing $${amount.toLocaleString()} — money printer go brrr`);
+    };
+
+    let chart = null;
+    function createChart() {
+      if (chart) chart.destroy();
+      chart = new Chart(document.getElementById('returnsChart'), {
+        type: 'line',
+        data: {
+          labels: ['0','3','6','9','12','15','18','21','24'],
+          datasets: [{
+            data: [10000,10800,11600,12400,13200,14000,14800,15700,16900],
+            borderColor: '#0ea5e9',
+            backgroundColor: 'rgba(14,165,233,0.3)',
+            fill: true,
+            tension: .45,
+            borderWidth: 9,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#cbd5e1' }, grid: { color: '#334155' } },
+            y: { ticks: { color: '#cbd5e1', callback: v => '$'+v.toLocaleString() }, grid: { color: '#334155' } }
+          }
+        }
+      });
+    }
+
+    document.getElementById('checkReturns').onclick = () => {
+      document.getElementById('returnsModal').classList.remove('hidden');
+      setTimeout(createChart, 100);
+    };
+
+    document.getElementById('closeModal').onclick = () => {
+      document.getElementById('returnsModal').classList.add('hidden');
+      if (chart) chart.destroy();
+    };
   </script>
 </body>
 </html>
