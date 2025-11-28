@@ -170,29 +170,25 @@
       };
     });
 
-    // Pay Button
-    document.getElementById('pay').onclick = () => {
-      const amount = parseInt(amountInput.value.replace(/,/g,'')) || 0;
-      const email = document.getElementById('email').value.trim();
+    // Pay Button using fixed payment links (change to price ids later)
+document.getElementById('pay').onclick = () => {
+  const amount = parseInt(amountInput.value.replace(/,/g,'')) || 0;
+  const email = document.getElementById('email').value.trim();
 
-      if (amount < 5) return alert('Minimum $5');
-      if (!email.includes('@')) return alert('Valid email required');
+  if (amount < 5) return alert('Minimum $5');
+  if (!email.includes('@')) return alert('Valid email required');
 
-      // Replace with your actual Stripe Price IDs
-      const priceId = paymentType === 'recurring' 
-        ? 'test_3cI7sK5eF8lheXn76DdIA02' 
-        : 'test_dRm9AS4aB7hd7uV76DdIA01';
+  let url = paymentType === 'recurring'
+    ? 'https://buy.stripe.com/test_3cI7sK5eF8lheXn76DdIA02'
+    : 'https://buy.stripe.com/test_dRm9AS4aB7hd7uV76DdIA01';
 
-      const stripe = Stripe('pk_test_51QSvuKCGfDSespsyzgT6rB4ad6x18k5dGO4pi98TEXzXboL8uBi7gUdrfRNUqnbPBGLIsGzhnrIDPA5plQMTbW8J00i2BQj4Sl');
+  url += `?prefilled_email=${encodeURIComponent(email)}`;
+  if (paymentType !== 'recurring') {
+    url += `&amount=${amount * 100}`;
+  }
 
-      stripe.redirectToCheckout({
-        lineItems: [{ price: priceId, quantity: 1 }],
-        mode: paymentType === 'recurring' ? 'subscription' : 'payment',
-        successUrl: window.location.origin + '/success.html',
-        cancelUrl: window.location.origin,
-        customerEmail: email,
-      });
-    };
+  window.location.href = url;
+};
 
     // Chart
     let chart = null;
