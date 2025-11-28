@@ -147,11 +147,11 @@
       amountInput.value = Number(raw).toLocaleString();
 
       const digitCount = raw.length;
-      if (digitCount <= 1) wrapper.style.fontSize = '7rem';
-      else if (digitCount === 3) wrapper.style.fontSize = '7rem';
-      else if (digitCount === 4) wrapper.style.fontSize = '5.5rem';
-      else if (digitCount === 5) wrapper.style.fontSize = '4.5rem';
-      else if (digitCount >= 6) wrapper.style.fontSize = '3.8rem';
+      if (digitCount <= 1) wrapper.style.fontSize = '6rem';
+      else if (digitCount === 3) wrapper.style.fontSize = '6rem';
+      else if (digitCount === 4) wrapper.style.fontSize = '4.5rem';
+      else if (digitCount === 5) wrapper.style.fontSize = '3.5rem';
+      else if (digitCount >= 6) wrapper.style.fontSize = '2.8rem';
     }
 
     amountInput.addEventListener('input', updateSize);
@@ -183,7 +183,7 @@
         ? 'price_1RECURRENCE_ID_HERE' 
         : 'price_1ONE_TIME_ID_HERE';
 
-      const stripe = Stripe('pk_live_YOUR_KEY');
+      const stripe = Stripe('pk_test_51QSvuKCGfDSespsyzgT6rB4ad6x18k5dGO4pi98TEXzXboL8uBi7gUdrfRNUqnbPBGLIsGzhnrIDPA5plQMTbW8J00i2BQj4Sl');
 
       stripe.redirectToCheckout({
         lineItems: [{ price: priceId, quantity: 1 }],
